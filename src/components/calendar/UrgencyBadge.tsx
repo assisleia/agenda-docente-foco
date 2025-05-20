@@ -3,6 +3,7 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { TaskUrgency, EventCategory } from '@/utils/dateUtils';
 import { EventType } from './CalendarEvent';
+import { CircleDot } from 'lucide-react';
 
 interface UrgencyBadgeProps {
   type: EventType;
@@ -10,56 +11,16 @@ interface UrgencyBadgeProps {
   category?: EventCategory;
 }
 
-const UrgencyBadge = ({ type, level, category }: UrgencyBadgeProps) => {
-  // For tasks, we show the urgency level
-  if (type === 'task') {
-    switch (level) {
-      case 'onTime':
-        return (
-          <Badge variant="outline" className="border-green-500 bg-green-50 text-green-700 text-xs">
-            Em tempo
-          </Badge>
-        );
-      case 'medium':
-        return (
-          <Badge variant="outline" className="border-yellow-500 bg-yellow-50 text-yellow-700 text-xs">
-            Atenção
-          </Badge>
-        );
-      case 'urgent':
-        return (
-          <Badge variant="outline" className="border-orange-500 bg-orange-50 text-orange-700 text-xs">
-            Urgente
-          </Badge>
-        );
-      default:
-        return null;
-    }
-  }
+const UrgencyBadge = ({ type, level }: UrgencyBadgeProps) => {
+  // Map urgency levels to colors
+  const levelColors = {
+    onTime: "text-green-500",
+    medium: "text-yellow-500",
+    urgent: "text-orange-500"
+  };
   
-  // For events and news, we only show the status color without text
-  if (type === 'event' || type === 'news') {
-    let colorClasses = '';
-    
-    // Color based on the level (timing/validity)
-    switch (level) {
-      case 'onTime':
-        colorClasses = "border-green-500 bg-green-50 text-green-50";
-        break;
-      case 'medium':
-        colorClasses = "border-yellow-500 bg-yellow-50 text-yellow-50";
-        break;
-      case 'urgent':
-        colorClasses = "border-orange-500 bg-orange-50 text-orange-50";
-        break;
-    }
-    
-    return (
-      <Badge variant="outline" className={`${colorClasses} text-xs w-3 h-3 rounded-full p-0`} />
-    );
-  }
-  
-  return null;
+  // For all types, we now use a simple colored dot
+  return <CircleDot className={`h-3 w-3 ${levelColors[level]} mr-1`} />;
 };
 
 export default UrgencyBadge;

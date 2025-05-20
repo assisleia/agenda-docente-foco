@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import CalendarHeader from '@/components/calendar/CalendarHeader';
@@ -10,6 +11,11 @@ import CalendarLegend from '@/components/calendar/CalendarLegend';
 import { CalendarEventProps } from '@/components/calendar/CalendarEvent';
 import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
 import { Toaster } from '@/components/ui/toaster';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import EventDialog from '@/components/calendar/EventDialog';
+import { ptBR } from 'date-fns/locale';
 
 // Sample events data with links and dates for automatic urgency calculation
 const sampleEvents: CalendarEventProps[] = [
@@ -120,7 +126,8 @@ const sampleEvents: CalendarEventProps[] = [
 
 const TeacherPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [view, setView] = useState<'day' | 'week' | 'month' | 'semester' | 'calendar'>('day'); // Added new view types
+  const [view, setView] = useState<'day' | 'week' | 'month' | 'semester'>('day');
+  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   
   // Sort sample events by type: tasks first, then events, then news
   const sortedSampleEvents = [...sampleEvents].sort((a, b) => {
@@ -142,9 +149,6 @@ const TeacherPage = () => {
       case 'semester':
         setCurrentDate(subMonths(currentDate, 6));
         break;
-      case 'calendar':
-        // No navigation for calendar view as it's selectable
-        break;
     }
   };
   
@@ -162,58 +166,93 @@ const TeacherPage = () => {
       case 'semester':
         setCurrentDate(addMonths(currentDate, 6));
         break;
-      case 'calendar':
-        // No navigation for calendar view as it's selectable
-        break;
     }
   };
 
   const handleDateChange = (date: Date) => {
     setCurrentDate(date);
   };
+
+  const handleOpenEventDialog = () => {
+    setIsEventDialogOpen(true);
+  };
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header userType="teacher" userName="Professor" />
+      <Header userType="teacher" userName="Professor(a) Maria Silva" />
       
       <div className="container mx-auto px-4 py-6 flex-1">
-        <h1 className="text-2xl font-bold mb-6 text-purple-800">Calendário Acadêmico</h1>
-        
-        <div className="mb-6">
-          <CalendarHeader 
-            currentDate={currentDate}
-            onPrevious={handlePrevious}
-            onNext={handleNext}
-            view={view}
-            onViewChange={setView}
-          />
-          
-          <CalendarLegend />
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold text-blue-900">Agenda Docente</h1>
         </div>
         
-        <div>
-          {view === 'day' && (
-            <DayView date={currentDate} events={sortedSampleEvents} />
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Left side - Fixed calendar */}
+          <div className="col-span-1">
+            <Card className="border shadow-sm">
+              <CardContent className="p-4">
+                <h2 className="text-xl font-semibold mb-4">Calendário</h2>
+                <SelectableCalendarView 
+                  date={currentDate} 
+                  events={sortedSampleEvents} 
+                  onDateChange={handleDateChange} 
+                />
+                
+                <div className="mt-4 space-x-2 flex flex-wrap gap-2">
+                  <Button className="bg-blue-500" onClick={handleOpenEventDialog}>+ Novo evento</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
           
-          {view === 'week' && (
-            <WeekView date={currentDate} events={sortedSampleEvents} />
-          )}
-          
-          {view === 'month' && (
-            <MonthView date={currentDate} events={sortedSampleEvents} />
-          )}
-
-          {view === 'semester' && (
-            <SemesterView date={currentDate} events={sortedSampleEvents} />
-          )}
-
-          {view === 'calendar' && (
-            <SelectableCalendarView date={currentDate} events={sortedSampleEvents} onDateChange={handleDateChange} />
-          )}
+          {/* Right side - Event views */}
+          <div className="col-span-1 md:col-span-2">
+            <Card className="border shadow-sm">
+              <CardContent className="p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold">Agenda - Este mês</h2>
+                  <CalendarHeader
+                    currentDate={currentDate}
+                    onPrevious={handlePrevious}
+                    onNext={handleNext}
+                    view={view}
+                    onViewChange={setView}
+                  />
+                </div>
+                
+                <Tabs defaultValue="day" className="w-full" onValueChange={(value) => setView(value as any)}>
+                  <TabsList className="mb-4 w-full grid grid-cols-4">
+                    <TabsTrigger value="day">Hoje</TabsTrigger>
+                    <TabsTrigger value="week">Semana</TabsTrigger>
+                    <TabsTrigger value="month">Mês</TabsTrigger>
+                    <TabsTrigger value="semester">Semestre</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="day" className="mt-0">
+                    <DayView date={currentDate} events={sortedSampleEvents} />
+                  </TabsContent>
+                  
+                  <TabsContent value="week" className="mt-0">
+                    <WeekView date={currentDate} events={sortedSampleEvents} />
+                  </TabsContent>
+                  
+                  <TabsContent value="month" className="mt-0">
+                    <MonthView date={currentDate} events={sortedSampleEvents} />
+                  </TabsContent>
+                  
+                  <TabsContent value="semester" className="mt-0">
+                    <SemesterView date={currentDate} events={sortedSampleEvents} />
+                  </TabsContent>
+                </Tabs>
+                
+                <CalendarLegend />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
       
+      <EventDialog open={isEventDialogOpen} onOpenChange={setIsEventDialogOpen} />
       <Toaster />
     </div>
   );
