@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import CalendarHeader from '@/components/calendar/CalendarHeader';
@@ -123,6 +122,12 @@ const TeacherPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [view, setView] = useState<'day' | 'week' | 'month' | 'semester' | 'calendar'>('day'); // Added new view types
   
+  // Sort sample events by type: tasks first, then events, then news
+  const sortedSampleEvents = [...sampleEvents].sort((a, b) => {
+    const typeOrder = { task: 0, event: 1, news: 2 };
+    return typeOrder[a.type] - typeOrder[b.type];
+  });
+  
   const handlePrevious = () => {
     switch (view) {
       case 'day':
@@ -188,23 +193,23 @@ const TeacherPage = () => {
         
         <div>
           {view === 'day' && (
-            <DayView date={currentDate} events={sampleEvents} />
+            <DayView date={currentDate} events={sortedSampleEvents} />
           )}
           
           {view === 'week' && (
-            <WeekView date={currentDate} events={sampleEvents} />
+            <WeekView date={currentDate} events={sortedSampleEvents} />
           )}
           
           {view === 'month' && (
-            <MonthView date={currentDate} events={sampleEvents} />
+            <MonthView date={currentDate} events={sortedSampleEvents} />
           )}
 
           {view === 'semester' && (
-            <SemesterView date={currentDate} events={sampleEvents} />
+            <SemesterView date={currentDate} events={sortedSampleEvents} />
           )}
 
           {view === 'calendar' && (
-            <SelectableCalendarView date={currentDate} events={sampleEvents} onDateChange={handleDateChange} />
+            <SelectableCalendarView date={currentDate} events={sortedSampleEvents} onDateChange={handleDateChange} />
           )}
         </div>
       </div>

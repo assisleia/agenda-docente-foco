@@ -53,7 +53,13 @@ const MonthView = ({ date, events }: MonthViewProps) => {
         (eventStartDate <= day && eventEndDate >= day) ||
         isSameDay(eventStartDate, day)
       );
-    }).slice(0, 3); // Limit to 3 events per day
+    })
+    // Sort by type: tasks first, then events, then news
+    .sort((a, b) => {
+      const typeOrder = { task: 0, event: 1, news: 2 };
+      return typeOrder[a.type] - typeOrder[b.type];
+    })
+    .slice(0, 3); // Limit to 3 events per day
   };
   
   return (

@@ -37,55 +37,25 @@ const UrgencyBadge = ({ type, level, category }: UrgencyBadgeProps) => {
     }
   }
   
-  // For events and news, we show the category (and visually indicate status with color)
+  // For events and news, we only show the status color without text
   if (type === 'event' || type === 'news') {
     let colorClasses = '';
     
     // Color based on the level (timing/validity)
     switch (level) {
       case 'onTime':
-        colorClasses = "border-green-500 bg-green-50 text-green-700";
+        colorClasses = "border-green-500 bg-green-50 text-green-50";
         break;
       case 'medium':
-        colorClasses = "border-yellow-500 bg-yellow-50 text-yellow-700";
+        colorClasses = "border-yellow-500 bg-yellow-50 text-yellow-50";
         break;
       case 'urgent':
-        colorClasses = "border-orange-500 bg-orange-50 text-orange-700";
+        colorClasses = "border-orange-500 bg-orange-50 text-orange-50";
         break;
     }
     
-    // Label based on the category
-    if (category) {
-      let label = '';
-      
-      switch (category) {
-        case 'jornadaDocente':
-          label = 'Jornada Docente';
-          break;
-        case 'jornadaDiscente':
-          label = 'Jornada Discente';
-          break;
-        case 'institucional':
-          label = 'Institucional';
-          break;
-      }
-      
-      return (
-        <Badge variant="outline" className={`${colorClasses} text-xs`}>
-          {label}
-        </Badge>
-      );
-    }
-    
-    // If no category specified, show a default label based on the level
-    const defaultLabel = type === 'event' 
-      ? (level === 'urgent' ? 'Em andamento' : level === 'medium' ? 'Em breve' : 'Agendado')
-      : (level === 'onTime' ? 'Válida' : 'Expirada');
-      
     return (
-      <Badge variant="outline" className={`${colorClasses} text-xs`}>
-        {defaultLabel}
-      </Badge>
+      <Badge variant="outline" className={`${colorClasses} text-xs w-3 h-3 rounded-full p-0`} />
     );
   }
   

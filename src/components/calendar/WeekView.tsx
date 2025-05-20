@@ -33,6 +33,10 @@ const WeekView = ({ date, events }: WeekViewProps) => {
         eventDate.getFullYear() === day.getFullYear() &&
         eventHour === hour
       );
+    })
+    .sort((a, b) => {
+      const typeOrder = { task: 0, event: 1, news: 2 };
+      return typeOrder[a.type] - typeOrder[b.type];
     });
   };
 

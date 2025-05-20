@@ -19,14 +19,26 @@ const DayView = ({ date, events }: DayViewProps) => {
   };
 
   const getEventsForHour = (hour: number) => {
-    return events.filter(event => {
-      const eventHour = event.startTime ? parseInt(event.startTime.split(':')[0]) : null;
-      return eventHour === hour;
-    });
+    // Sort events by type: tasks first, then events, then news
+    return events
+      .filter(event => {
+        const eventHour = event.startTime ? parseInt(event.startTime.split(':')[0]) : null;
+        return eventHour === hour;
+      })
+      .sort((a, b) => {
+        const typeOrder = { task: 0, event: 1, news: 2 };
+        return typeOrder[a.type] - typeOrder[b.type];
+      });
   };
 
+  // Get all events without specific time
   const getAllDayEvents = () => {
-    return events.filter(event => !event.startTime);
+    return events
+      .filter(event => !event.startTime)
+      .sort((a, b) => {
+        const typeOrder = { task: 0, event: 1, news: 2 };
+        return typeOrder[a.type] - typeOrder[b.type];
+      });
   };
 
   const allDayEvents = getAllDayEvents();

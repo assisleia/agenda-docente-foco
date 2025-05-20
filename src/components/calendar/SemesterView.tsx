@@ -22,6 +22,12 @@ const SemesterView = ({ date, events }: SemesterViewProps) => {
       value: format(monthDate, 'yyyy-MM')
     };
   });
+  
+  // Sort events by type: tasks first, then events, then news
+  const sortedEvents = [...events].sort((a, b) => {
+    const typeOrder = { task: 0, event: 1, news: 2 };
+    return typeOrder[a.type] - typeOrder[b.type];
+  });
 
   return (
     <Card>
@@ -42,7 +48,7 @@ const SemesterView = ({ date, events }: SemesterViewProps) => {
           
           {months.map((month) => (
             <TabsContent key={month.value} value={month.value} className="mt-0">
-              <MonthView date={month.date} events={events} />
+              <MonthView date={month.date} events={sortedEvents} />
             </TabsContent>
           ))}
         </Tabs>

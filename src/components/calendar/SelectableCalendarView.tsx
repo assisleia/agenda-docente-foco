@@ -29,6 +29,12 @@ const SelectableCalendarView = ({ date, events, onDateChange }: SelectableCalend
     return format(eventDate, 'yyyy-MM-dd');
   });
 
+  // Sort events by type: tasks first, then events, then news
+  const sortedEvents = [...events].sort((a, b) => {
+    const typeOrder = { task: 0, event: 1, news: 2 };
+    return typeOrder[a.type] - typeOrder[b.type];
+  });
+
   // Custom day rendering to show dots for days with events
   const renderDay = (day: Date, cellId: string): React.ReactNode => {
     const formattedDay = format(day, 'yyyy-MM-dd');
@@ -66,7 +72,7 @@ const SelectableCalendarView = ({ date, events, onDateChange }: SelectableCalend
       <Card className="lg:col-span-2">
         <CardContent className="p-0">
           {selectedDate && (
-            <DayView date={selectedDate} events={events} />
+            <DayView date={selectedDate} events={sortedEvents} />
           )}
         </CardContent>
       </Card>
