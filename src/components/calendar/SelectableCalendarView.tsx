@@ -38,7 +38,7 @@ const SelectableCalendarView = ({ date, events, onDateChange }: SelectableCalend
         hasEvent: (date) => eventDates.includes(format(date, 'yyyy-MM-dd')),
       }}
       modifiersClassNames={{
-        hasEvent: "font-bold text-blue-800 border-blue-500",
+        hasEvent: "font-bold text-purple-800 border-purple-500",
       }}
     />
   );

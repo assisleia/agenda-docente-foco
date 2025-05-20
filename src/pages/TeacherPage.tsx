@@ -183,7 +183,7 @@ const TeacherPage = () => {
       
       <div className="container mx-auto px-4 py-6 flex-1">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-blue-900">Agenda Docente</h1>
+          <h1 className="text-2xl font-bold text-purple-900">Agenda Docente</h1>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -191,7 +191,7 @@ const TeacherPage = () => {
           <div className="col-span-1">
             <Card className="border shadow-sm">
               <CardContent className="p-4">
-                <h2 className="text-xl font-semibold mb-4">Calendário</h2>
+                <h2 className="text-xl font-semibold mb-4 text-purple-800">Calendário</h2>
                 <SelectableCalendarView 
                   date={currentDate} 
                   events={sortedSampleEvents} 
@@ -199,7 +199,7 @@ const TeacherPage = () => {
                 />
                 
                 <div className="mt-4 space-x-2 flex flex-wrap gap-2">
-                  <Button className="bg-blue-500" onClick={handleOpenEventDialog}>+ Novo evento</Button>
+                  <Button className="bg-purple-600 hover:bg-purple-700" onClick={handleOpenEventDialog}>+ Novo evento</Button>
                 </div>
               </CardContent>
             </Card>
@@ -210,7 +210,7 @@ const TeacherPage = () => {
             <Card className="border shadow-sm">
               <CardContent className="p-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold">Agenda - Este mês</h2>
+                  <h2 className="text-xl font-semibold text-purple-800">Agenda - Este mês</h2>
                   <CalendarHeader
                     currentDate={currentDate}
                     onPrevious={handlePrevious}
@@ -222,10 +222,10 @@ const TeacherPage = () => {
                 
                 <Tabs defaultValue="day" className="w-full" onValueChange={(value) => setView(value as any)}>
                   <TabsList className="mb-4 w-full grid grid-cols-4">
-                    <TabsTrigger value="day">Hoje</TabsTrigger>
-                    <TabsTrigger value="week">Semana</TabsTrigger>
-                    <TabsTrigger value="month">Mês</TabsTrigger>
-                    <TabsTrigger value="semester">Semestre</TabsTrigger>
+                    <TabsTrigger value="day" className="text-purple-700 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-900">Hoje</TabsTrigger>
+                    <TabsTrigger value="week" className="text-purple-700 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-900">Semana</TabsTrigger>
+                    <TabsTrigger value="month" className="text-purple-700 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-900">Mês</TabsTrigger>
+                    <TabsTrigger value="semester" className="text-purple-700 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-900">Semestre</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="day" className="mt-0">
