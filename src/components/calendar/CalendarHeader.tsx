@@ -9,8 +9,8 @@ interface CalendarHeaderProps {
   currentDate: Date;
   onPrevious: () => void;
   onNext: () => void;
-  view: 'day' | 'week' | 'month';
-  onViewChange: (view: 'day' | 'week' | 'month') => void;
+  view: 'day' | 'week' | 'month' | 'semester' | 'calendar';
+  onViewChange: (view: 'day' | 'week' | 'month' | 'semester' | 'calendar') => void;
 }
 
 const CalendarHeader = ({ 
@@ -28,26 +28,42 @@ const CalendarHeader = ({
         return `Semana de ${format(currentDate, "dd 'de' MMMM", { locale: ptBR })}`;
       case 'month':
         return format(currentDate, "MMMM 'de' yyyy", { locale: ptBR });
+      case 'semester':
+        return `Semestre - ${format(currentDate, "MMMM 'de' yyyy", { locale: ptBR })}`;
+      case 'calendar':
+        return format(currentDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
       default:
         return '';
     }
   };
 
   return (
-    <div className="flex justify-between items-center mb-4 p-2">
+    <div className="flex flex-col md:flex-row md:justify-between items-center mb-4 p-2 gap-2">
       <div className="flex items-center">
         <h2 className="text-xl font-semibold mr-4 text-purple-800">{formatTitle()}</h2>
         <div className="flex items-center space-x-1">
-          <Button variant="outline" size="icon" onClick={onPrevious} className="border-purple-200 hover:bg-purple-100">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={onPrevious} 
+            className="border-purple-200 hover:bg-purple-100"
+            disabled={view === 'calendar'}
+          >
             <ChevronLeft className="h-4 w-4 text-purple-700" />
           </Button>
-          <Button variant="outline" size="icon" onClick={onNext} className="border-purple-200 hover:bg-purple-100">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={onNext} 
+            className="border-purple-200 hover:bg-purple-100"
+            disabled={view === 'calendar'}
+          >
             <ChevronRight className="h-4 w-4 text-purple-700" />
           </Button>
         </div>
       </div>
       
-      <div className="flex items-center space-x-2 bg-purple-50 rounded-md p-1">
+      <div className="flex items-center space-x-2 bg-purple-50 rounded-md p-1 overflow-x-auto">
         <Button 
           variant={view === 'day' ? "default" : "ghost"} 
           size="sm"
@@ -71,6 +87,22 @@ const CalendarHeader = ({
           className={view === 'month' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
         >
           Mês
+        </Button>
+        <Button 
+          variant={view === 'semester' ? "default" : "ghost"} 
+          size="sm"
+          onClick={() => onViewChange('semester')}
+          className={view === 'semester' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
+        >
+          Semestre
+        </Button>
+        <Button 
+          variant={view === 'calendar' ? "default" : "ghost"} 
+          size="sm"
+          onClick={() => onViewChange('calendar')}
+          className={view === 'calendar' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
+        >
+          Calendário
         </Button>
       </div>
     </div>

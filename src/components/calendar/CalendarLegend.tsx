@@ -1,7 +1,7 @@
 
 import React from 'react';
 import UrgencyBadge from './UrgencyBadge';
-import { Bell, FileText, Megaphone } from 'lucide-react';
+import { Bell, FileText, Megaphone, CircleDot } from 'lucide-react';
 
 const CalendarLegend = () => {
   return (
@@ -27,9 +27,18 @@ const CalendarLegend = () => {
       <div className="flex flex-col gap-2">
         <h3 className="text-sm font-semibold text-purple-800">Status das Tarefas:</h3>
         <div className="flex flex-wrap gap-2">
-          <UrgencyBadge type="task" level="onTime" />
-          <UrgencyBadge type="task" level="medium" />
-          <UrgencyBadge type="task" level="urgent" />
+          <div className="flex items-center gap-1">
+            <CircleDot className="h-3 w-3 text-green-500" />
+            <UrgencyBadge type="task" level="onTime" />
+          </div>
+          <div className="flex items-center gap-1">
+            <CircleDot className="h-3 w-3 text-yellow-500" />
+            <UrgencyBadge type="task" level="medium" />
+          </div>
+          <div className="flex items-center gap-1">
+            <CircleDot className="h-3 w-3 text-orange-500" />
+            <UrgencyBadge type="task" level="urgent" />
+          </div>
         </div>
       </div>
 

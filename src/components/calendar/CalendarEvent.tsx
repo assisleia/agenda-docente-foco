@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ExternalLink, Check, Bell, FileText, Megaphone, Calendar } from 'lucide-react';
+import { ExternalLink, Check, Bell, FileText, Megaphone, Calendar, CircleDot } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UrgencyBadge from './UrgencyBadge';
@@ -61,6 +61,7 @@ const CalendarEvent = ({
 
   const status = getStatus();
 
+  // Type-specific styles with different colors
   const getEventStyles = () => {
     const baseStyles = "p-2 rounded-md text-sm mb-1 border-l-4";
     
@@ -81,7 +82,7 @@ const CalendarEvent = ({
     // Completed style
     const completedStyle = isCompleted || isRegistered ? "opacity-60" : "";
     
-    return cn(baseStyles, typeStyles[type], statusStyles[status], completedStyle);
+    return cn(baseStyles, typeStyles[type], completedStyle);
   };
 
   const getIcon = () => {
@@ -95,6 +96,16 @@ const CalendarEvent = ({
       default:
         return null;
     }
+  };
+
+  const getStatusDot = () => {
+    const statusColors = {
+      onTime: "text-green-500",
+      medium: "text-yellow-500",
+      urgent: "text-orange-500"
+    };
+    
+    return <CircleDot className={`h-3 w-3 ${statusColors[status]} mr-1`} />;
   };
 
   const getTimeString = () => {
@@ -195,7 +206,10 @@ const CalendarEvent = ({
           {(startTime || endTime) && (
             <span className="text-xs text-gray-500">{getTimeString()}</span>
           )}
-          <UrgencyBadge type={type} level={status} category={category} />
+          <div className="flex items-center">
+            {getStatusDot()} 
+            <UrgencyBadge type={type} level={status} category={category} />
+          </div>
         </div>
       </div>
     </div>

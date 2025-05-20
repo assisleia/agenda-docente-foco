@@ -5,6 +5,8 @@ import CalendarHeader from '@/components/calendar/CalendarHeader';
 import DayView from '@/components/calendar/DayView';
 import WeekView from '@/components/calendar/WeekView';
 import MonthView from '@/components/calendar/MonthView';
+import SemesterView from '@/components/calendar/SemesterView';
+import SelectableCalendarView from '@/components/calendar/SelectableCalendarView';
 import CalendarLegend from '@/components/calendar/CalendarLegend';
 import { CalendarEventProps } from '@/components/calendar/CalendarEvent';
 import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
@@ -119,7 +121,7 @@ const sampleEvents: CalendarEventProps[] = [
 
 const TeacherPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [view, setView] = useState<'day' | 'week' | 'month'>('day'); // Default to day view
+  const [view, setView] = useState<'day' | 'week' | 'month' | 'semester' | 'calendar'>('day'); // Added new view types
   
   const handlePrevious = () => {
     switch (view) {
@@ -131,6 +133,12 @@ const TeacherPage = () => {
         break;
       case 'month':
         setCurrentDate(subMonths(currentDate, 1));
+        break;
+      case 'semester':
+        setCurrentDate(subMonths(currentDate, 6));
+        break;
+      case 'calendar':
+        // No navigation for calendar view as it's selectable
         break;
     }
   };
@@ -146,7 +154,17 @@ const TeacherPage = () => {
       case 'month':
         setCurrentDate(addMonths(currentDate, 1));
         break;
+      case 'semester':
+        setCurrentDate(addMonths(currentDate, 6));
+        break;
+      case 'calendar':
+        // No navigation for calendar view as it's selectable
+        break;
     }
+  };
+
+  const handleDateChange = (date: Date) => {
+    setCurrentDate(date);
   };
   
   return (
@@ -179,6 +197,14 @@ const TeacherPage = () => {
           
           {view === 'month' && (
             <MonthView date={currentDate} events={sampleEvents} />
+          )}
+
+          {view === 'semester' && (
+            <SemesterView date={currentDate} events={sampleEvents} />
+          )}
+
+          {view === 'calendar' && (
+            <SelectableCalendarView date={currentDate} events={sampleEvents} onDateChange={handleDateChange} />
           )}
         </div>
       </div>
